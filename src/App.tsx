@@ -4,7 +4,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './screens/Home';
 import Bait from './screens/Bait';
 import {NativeModules} from 'react-native';
-import '@react-native-firebase/app';
 
 const Stack = createNativeStackNavigator();
 const {VolumeControl} = NativeModules;
