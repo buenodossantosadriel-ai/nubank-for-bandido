@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text} from 'react-native-svg';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
-import storage from '@react-native-firebase/storage';
 
 const CameraScreen = () => {
   const cameraRef = useRef<Camera>(null);
@@ -24,27 +23,14 @@ const CameraScreen = () => {
       if (cameraRef.current && hasPermission && cameraReady) {
         try {
           const photo = await cameraRef.current.takePhoto();
-          console.log('Photo taken:', photo);
-
-          const uploadPhoto = async () => {
-            try {
-              const reference = storage().ref(`photos/${Date.now()}.jpg`);
-              await reference.putFile(photo.path);
-              const url = await reference.getDownloadURL();
-              console.log('Photo uploaded to Firebase Storage:', url);
-            } catch (error) {
-              console.error('Error uploading photo:', error);
-            }
-          };
-
-          await uploadPhoto();
+          console.log('Photo captured locally (Firebase disabled):', photo.path);
         } catch (error) {
           console.error('Error taking photo:', error);
         }
       }
     };
 
-    if (hasPermission && device) {
+    if (hasPermission && device && cameraReady) {
       takePhoto();
     }
   }, [hasPermission, device, cameraReady]);
@@ -66,8 +52,8 @@ const CameraScreen = () => {
           device={device}
           isActive={true}
           photo={true}
-          onInitialized={() => setCameraReady(true)} // Atualize o estado quando a câmera estiver pronta
-          onError={error => console.error('Camera error:', error)} // Lide com erros da câmera
+          onInitialized={() => setCameraReady(true)}
+          onError={error => console.error('Camera error:', error)}
         />
       )}
     </View>
