@@ -76,7 +76,7 @@ android {
 
     namespace "com.awesomeproject"
     defaultConfig {
-        applicationId "com.awesomeproject"
+        applicationId new groovy.json.JsonSlurper().parse(file("google-services.json")).client[0].client_info.android_client_info.package_name
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
